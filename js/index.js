@@ -25,37 +25,29 @@ function inicializarSlider(){
     prefix: "$"
   });
 }
-/*
-  Función que reproduce el video de fondo al hacer scroll, y deteiene la reproducción al detener el scroll
-*/
-function playVideoOnScroll(){
-  var ultimoScroll = 0,
-      intervalRewind;
-  var video = document.getElementById('vidFondo');
-  $(window)
-    .scroll((event)=>{
-      var scrollActual = $(window).scrollTop();
-      if (scrollActual > ultimoScroll){
-       video.play();
-     } else {
-        //this.rewind(1.0, video, intervalRewind);
-        video.play();
-     }
-     ultimoScroll = scrollActual;
-    })
-    .scrollEnd(()=>{
-      video.pause();
-    }, 10)
+
+//Para activar los select
+function Ciudad(){
+  var selector = $('#selectCiudad').detach()
+  var insertar = document.createElement('div')
+  
+  $('.filtroCiudad').append(insertar)
+  $('.filtroCiudad').find('div').addClass('select-wrapper')
+  $('.filtroCiudad').find('.select-wrapper').append(selector)
 }
 
-//inicializarSlider();
-//playVideoOnScroll();
+function Tipo(){
+  var tipo = $('#selectTipo').detach()
+  var insertar = document.createElement('div')
 
-$(document).ready(function(){
-  
-  $('#mostrarTodos').click(darInformacion);
-  
-});
+  $('.filtroTipo').append(insertar)
+  $('.filtroTipo').find('div').addClass('select-wrapper')
+  $('.filtroTipo').find('.select-wrapper').append(tipo)
+}
+
+inicializarSlider();
+Ciudad();
+Tipo();
 
 //Peticiones Ajax
 function darInformacion(){
@@ -65,11 +57,10 @@ function darInformacion(){
   }else{
     xhr = new ActiveXObject('Microsoft.XMLHTTP');
   }
-  xhr.open('GET', './buscador.php', true);
+  xhr.open('GET', 'buscador.php', true);
   xhr.onreadystatechange = function(){
     if(this.readyState == 4 && this.status == 200){
       var datos = JSON.parse(this.responseText);
-      console.log(datos);     
         $.each(datos, function(index, obj){
           $(".informacion").append(
                                   '<div class="card horizontal">'+
@@ -97,5 +88,89 @@ function darInformacion(){
   xhr.send();
 }
 
+function seleccionarCiudad(){
+  var xhr;
+  if(window.XMLHttpRequest){
+    xhr = new XMLHttpRequest();
+  }else{
+    xhr = new ActiveXObject('Microsoft.XMLHTTP');
+  }
+  xhr.open('GET', 'buscador.php', true);
+  xhr.onreadystatechange = function(){
+    if(this.readyState == 4 && this.status == 200){
+      var datos = JSON.parse(this.responseText);
+      var i = 0;
+      var arreglo = [];
+      var ciudad;
 
+      while(i < 100){
+        ciudad = datos[i].Ciudad;
+        if(arreglo.includes(ciudad) == false){
+          arreglo.push(ciudad);
+        }
+        i++;    
+      }
+      for(var j in arreglo){
+        console.log(arreglo[j]);
+        $('#selectCiudad').append('<option>'+arreglo[j]+'</option>');
+      } 
+    }
+  }
+  xhr.send()
+}
 
+function seleccionarTipo(){
+  var xhr;
+  if(window.XMLHttpRequest){
+    xhr = new XMLHttpRequest();
+  }else{
+    xhr = new ActiveXObject('Microsoft.XMLHTTP');
+  }
+
+  xhr.open('GET', 'buscador.php', true),
+  xhr.onreadystatechange = function(){
+    if(this.readyState == 4 && this.status == 200){
+      var datos = JSON.parse(this.responseText);
+      var arreglo = [];
+      var ciudad;
+      var i=0;
+      while(i < 100){
+        ciudad = datos[i].Tipo;
+        if(arreglo.includes(ciudad) == false){
+          arreglo.push(ciudad);
+        }
+        i++;
+      }
+      for(var j in arreglo){
+        $('#selectTipo').append('<option>'+arreglo[j]+'</option>');
+      }
+    }
+  }
+  xhr.send();
+}
+
+//Para cuando la pagina esta cargada
+$(document).ready(function(){
+  $('select').css('display','block');
+  $('#mostrarTodos').click(darInformacion);
+
+  //Funcion click para el select Ciudad
+  var cli = 0;
+  $('#selectCiudad').on("click", function(){
+    if(cli <= 0){
+      cli = 1;
+      seleccionarCiudad();
+    }
+  });
+  
+  //Funcion click para el select Tipo de Casa
+  var tipo = 0;
+  $('#selectTipo').on("click", function(){
+    if(tipo <= 0){
+      tipo = 1;
+      seleccionarTipo();
+    }
+  });
+
+});
+/*

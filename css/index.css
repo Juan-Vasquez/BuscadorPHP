@@ -1,13 +1,6 @@
-video#vidFondo {
-    position: fixed;
-    min-width: 100%;
-    min-height: 100%;
-    width: 100%;
-    height: auto;
-    z-index: -100;
-    left: 0;
-    top: 0;
-    background-size: cover;
+#fondo{
+  background-image: url('../img/ciudad.png');
+  background-attachment: fixed;
 
 }
 
@@ -21,6 +14,7 @@ video#vidFondo {
   height: auto;
   align-content: flex-start;
 }
+
 
 .rowTitulo{
   width: 100%;
@@ -62,7 +56,7 @@ video#vidFondo {
   text-align: center;
 }
 .filtroCiudad .select-wrapper{
-  margin: 25px auto;
+  margin: 35px auto;
   width: 90%;
 }
 .filtroTipo{
@@ -71,7 +65,7 @@ video#vidFondo {
   text-align: center;
 }
 .filtroTipo .select-wrapper{
-  margin: 5px auto;
+  margin: 15px auto;
   width: 90%;
 }
 .filtroPrecio{
