@@ -111,7 +111,6 @@ function seleccionarCiudad(){
         i++;    
       }
       for(var j in arreglo){
-        console.log(arreglo[j]);
         $('#selectCiudad').append('<option>'+arreglo[j]+'</option>');
       } 
     }
@@ -149,6 +148,43 @@ function seleccionarTipo(){
   xhr.send();
 }
 
+function rangoPrecios(e){
+  e.preventDefault()
+  var from = $('.irs-from').text();
+  var to = $('.irs-to').text();
+
+  $.ajax(
+    {
+      url: 'buscador.php',
+      type: 'GET',
+      success: function(res){
+        var datos = JSON.parse(res);
+
+        var fromString = from.substring(1);
+        var toString = to.substring(1);
+        var fromEntero = parseInt(fromString);
+        var toEntero = parseInt(toString);
+        var precio;
+        var arreglo = [];
+        var i=0;
+
+        while(i<100){
+          precio = datos[i];
+          pre = precio.Precio
+          var s = pre.substring(1);
+          var e = parseInt(s);
+          if(e >= fromEntero || e <= toEntero){
+            arreglo.push(precio);
+          }
+          i++;
+        }
+        console.log(arreglo);
+      }
+    }
+  );
+
+}
+
 //Para cuando la pagina esta cargada
 $(document).ready(function(){
   $('select').css('display','block');
@@ -171,6 +207,7 @@ $(document).ready(function(){
       seleccionarTipo();
     }
   });
+  
+  $('#formulario').submit(rangoPrecios);
 
 });
-/*
