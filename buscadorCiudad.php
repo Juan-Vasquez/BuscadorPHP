@@ -17,7 +17,7 @@
 		$ciudad = array_unique($ciudad);
 		$ciudadOPC = "";
 		foreach ($ciudad as $key) {
-			$ciudadOPC .= '<option value='.$key.' >'.$key.'</option>';	
+			$ciudadOPC .= '<option>'.$key.'</option>';	
 		}
 		return json_encode($ciudadOPC);
 	}

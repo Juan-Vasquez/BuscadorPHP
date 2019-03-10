@@ -17,7 +17,7 @@
 		$tipo = array_unique($arreglo);
 		$tipoOpcion = "";
 		foreach ($tipo as $key) {
-			$tipoOpcion .= '<option value='.$key.' >'.$key.'</option>';
+			$tipoOpcion .= '<option>'.$key.'</option>';
 		}
 		return json_encode($tipoOpcion);
 	}

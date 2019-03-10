@@ -88,8 +88,7 @@ function darInformacion(){
   xhr.send();
 }
 
-function seleccionarCiudad(){
-  
+function seleccionarCiudad(){ 
   var xhr;
   if(window.XMLHttpRequest){
     xhr = new XMLHttpRequest();
@@ -127,15 +126,49 @@ function rangoPrecios(e){
   e.preventDefault()
   var from = $('.irs-from').text();
   var to = $('.irs-to').text();
-
+  var ciudad=$('#selectCiudad').val();
+  var tipo = $('#selectTipo').val();
+  
   var fromString = from.substring(1);
   var toString = to.substring(1);
-  var fromEntero = parseInt(fromString);
-  var toEntero = parseInt(toString);
-
-  console.log(fromEntero);
-  console.log(toEntero);
-
+  
+  $.ajax(
+    {
+      url: 'servidor.php',
+      type: 'POST',
+      data: {
+        izquierda: fromString,
+        derecha: toString,
+        ciudad: ciudad,
+        tipo: tipo
+      },
+      success: function(data){
+        var datos = JSON.parse(data);
+        $.each(datos, function(index, obj){
+          $(".informacion").append(
+                                  '<div class="card horizontal">'+
+                                    '<div class="card-image">'+
+                                      '<img src="./img/home.jpg">'+
+                                    '</div>'+
+                                    '<div class="card-stacked">'+
+                                      '<div class="card-content">'+
+                                        '<p><b>Direccion:</b> '+obj.Direccion+'</p>'+
+                                        '<p><b>Ciudad:</b> '+obj.Ciudad+'</p>'+
+                                        '<p><b>Telefono:</b> '+obj.Telefono+'</p>'+
+                                        '<p><b>Codigo Postal:</b> '+obj.Codigo_Postal+'</p>'+
+                                        '<p><b>Tipo:</b> '+obj.Tipo+'</p>'+
+                                        '<p><b>Precio:</b> <span class="orange-text lighten-1">'+obj.Precio+'</span></p>'+
+                                      '</div>'+
+                                      '<div class="card-action">'+
+                                        '<a>Ver mas</a>'+
+                                      '</div>'+
+                                    '</div>'+
+                                  '</div>'
+          );
+        });
+      }
+    }
+  )
 }
 
 //Para cuando la pagina esta cargada
