@@ -89,33 +89,21 @@ function darInformacion(){
 }
 
 function seleccionarCiudad(){
+  
   var xhr;
   if(window.XMLHttpRequest){
     xhr = new XMLHttpRequest();
   }else{
     xhr = new ActiveXObject('Microsoft.XMLHTTP');
   }
-  xhr.open('GET', 'buscador.php', true);
+  xhr.open('GET', 'buscadorCiudad.php', true);
   xhr.onreadystatechange = function(){
     if(this.readyState == 4 && this.status == 200){
       var datos = JSON.parse(this.responseText);
-      var i = 0;
-      var arreglo = [];
-      var ciudad;
-
-      while(i < 100){
-        ciudad = datos[i].Ciudad;
-        if(arreglo.includes(ciudad) == false){
-          arreglo.push(ciudad);
-        }
-        i++;    
-      }
-      for(var j in arreglo){
-        $('#selectCiudad').append('<option>'+arreglo[j]+'</option>');
-      } 
+      $('#selectCiudad').append(datos); 
     }
   }
-  xhr.send()
+  xhr.send();
 }
 
 function seleccionarTipo(){
@@ -125,24 +113,11 @@ function seleccionarTipo(){
   }else{
     xhr = new ActiveXObject('Microsoft.XMLHTTP');
   }
-
-  xhr.open('GET', 'buscador.php', true),
+  xhr.open('GET', 'buscadorTipo.php', true),
   xhr.onreadystatechange = function(){
     if(this.readyState == 4 && this.status == 200){
       var datos = JSON.parse(this.responseText);
-      var arreglo = [];
-      var ciudad;
-      var i=0;
-      while(i < 100){
-        ciudad = datos[i].Tipo;
-        if(arreglo.includes(ciudad) == false){
-          arreglo.push(ciudad);
-        }
-        i++;
-      }
-      for(var j in arreglo){
-        $('#selectTipo').append('<option>'+arreglo[j]+'</option>');
-      }
+      $('#selectTipo').append(datos);
     }
   }
   xhr.send();
@@ -153,35 +128,13 @@ function rangoPrecios(e){
   var from = $('.irs-from').text();
   var to = $('.irs-to').text();
 
-  $.ajax(
-    {
-      url: 'buscador.php',
-      type: 'GET',
-      success: function(res){
-        var datos = JSON.parse(res);
+  var fromString = from.substring(1);
+  var toString = to.substring(1);
+  var fromEntero = parseInt(fromString);
+  var toEntero = parseInt(toString);
 
-        var fromString = from.substring(1);
-        var toString = to.substring(1);
-        var fromEntero = parseInt(fromString);
-        var toEntero = parseInt(toString);
-        var precio;
-        var arreglo = [];
-        var i=0;
-
-        while(i<100){
-          precio = datos[i];
-          pre = precio.Precio
-          var s = pre.substring(1);
-          var e = parseInt(s);
-          if(e >= fromEntero || e <= toEntero){
-            arreglo.push(precio);
-          }
-          i++;
-        }
-        console.log(arreglo);
-      }
-    }
-  );
+  console.log(fromEntero);
+  console.log(toEntero);
 
 }
 
